@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">SQLite App</string>
+    <string name="Your_Name">Your Name</string>
+    <string name="Show">Show</string>
+
+    <string-array name="priority_option">
+        <item>Low</item>
+        <item>Normal</item>
+        <item>High</item>
+        <item>Emergency</item>
+    </string-array>
+</resources>
