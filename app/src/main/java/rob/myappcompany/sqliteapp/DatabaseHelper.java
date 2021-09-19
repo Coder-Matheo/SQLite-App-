@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.view.View;
+
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -39,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUM_UPDATED_DATE_RESPONSE = "UPDATED_DATE_RESPONSE";
     private static final String ID = "ID";
 
-    Context context;
+    public static View view;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -79,13 +83,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //WORKING HERE
-    public boolean deleteItem(String idInput){
+    public boolean deleteItem(int positionId){
         try{
             SQLiteDatabase db = this.getWritableDatabase();
-            db.delete(TICKET_SYSTEM_TABLE, "id=0", new String[]{idInput});
-            db.close();
-            Log.i("TAG", "DELETED");
-            return true;
+
+            //Should change Where to COLUM_ID.
+            //We doing of COLUM_CREATOR_NAME, because ID Table isn't AUTOINCREMENT
+            return db.delete(TICKET_SYSTEM_TABLE, COLUM_QUESTION_TICKET+"=?",
+                    new String[]{MainActivity.databaseHelper.getEveryTicket().get(positionId).getQuestion_ticket()}) > 0;
         }catch (SQLiteException e){
             e.printStackTrace();
             return false;

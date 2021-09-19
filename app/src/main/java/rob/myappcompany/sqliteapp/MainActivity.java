@@ -16,6 +16,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -23,7 +26,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    DatabaseHelper databaseHelper;
+    public static DatabaseHelper databaseHelper;
     Spinner spinner;
     EditText createrEditText;
     EditText questionEditText;
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ListView ticketListView;
     private ArrayAdapter arrayAdapter;
     private ArrayList ticketArrayList;
-    public String tag = MainActivity.class.getSimpleName();
+    public static String tag = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //initialization Object
         databaseHelper = new DatabaseHelper(this);
 
+        //Execute Function
+        deleteItem();
 
         //Spinner Adapter
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.priority_option, android.R.layout.simple_spinner_item);
@@ -143,10 +148,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         databaseHelper.getEveryTicket().get(i).getCreated_date(),
                         databaseHelper.getEveryTicket().get(i).getUpdated_date()));
         }
-        Log.i(tag, databaseHelper.getEveryTicket().get(0).getCreator_name());
+
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, newlistTicket);
         ticketListView.setAdapter(arrayAdapter);
+
+    }
+
+
+    public void deleteItem(){
+
+        ticketListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                databaseHelper.deleteItem(position);
+                return false;
+            }
+        });
 
     }
 }
